@@ -43,15 +43,31 @@ function createServer() {
         }
 
         const filePath = path.resolve(__dirname, '../db/expense.json');
-        let expenses = {};
+        let expenses = [];
 
-        expenses = { date, title, amount };
+        try {
+          const content = fs.readFileSync(filePath, 'utf-8').trim();
+
+          if (content) {
+            const parsed = JSON.parse(content);
+
+            if (Array.isArray(parsed)) {
+              expenses = parsed;
+            } else {
+              expenses = [];
+            }
+          }
+        } catch (e) {
+          expenses = [];
+        }
+
+        expenses.push({ date, title, amount });
 
         fs.writeFileSync(filePath, JSON.stringify(expenses, null, 2));
 
         res.writeHead(200, { 'Content-Type': 'application/json' });
 
-        return res.end(JSON.stringify(expenses));
+        return res.end(`<pre>${JSON.stringify(expenses)}</pre>`);
       });
 
       return;

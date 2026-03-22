@@ -65,7 +65,7 @@ function createServer() {
 
         fs.writeFileSync(filePath, JSON.stringify(expenses, null, 2));
 
-        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.writeHead(200, { 'Content-Type': 'text/html' });
 
         return res.end(`<pre>${JSON.stringify(expenses)}</pre>`);
       });
